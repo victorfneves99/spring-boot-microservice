@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "TestCatalogServiceApplication",
+            "request": "launch",
+            "mainClass": "com.systemlabs.catalog_service.TestCatalogServiceApplication",
+            "projectName": "catalog-service"
+        }
+    ]
+}
