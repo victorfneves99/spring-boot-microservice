@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CatalogServiceApplication",
+            "request": "launch",
+            "mainClass": "com.systemlabs.catalog_service.CatalogServiceApplication",
+            "projectName": "catalog-service"
+        },
+        {
+            "type": "java",
             "name": "TestCatalogServiceApplication",
             "request": "launch",
             "mainClass": "com.systemlabs.catalog_service.TestCatalogServiceApplication",
