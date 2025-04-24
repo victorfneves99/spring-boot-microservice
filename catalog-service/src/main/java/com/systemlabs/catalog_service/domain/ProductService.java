@@ -3,7 +3,6 @@ package com.systemlabs.catalog_service.domain;
 import com.systemlabs.catalog_service.ApplicationProperties;
 import jakarta.transaction.Transactional;
 import java.util.Optional;
-import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -11,12 +10,16 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Transactional
-@AllArgsConstructor
 public class ProductService {
 
     private final ApplicationProperties applicationProperties;
 
     private final ProductRepository productRespository;
+
+    public ProductService(ApplicationProperties applicationProperties, ProductRepository productRespository) {
+        this.applicationProperties = applicationProperties;
+        this.productRespository = productRespository;
+    }
 
     public PageResult<Product> getProducts(int pageNo) {
 

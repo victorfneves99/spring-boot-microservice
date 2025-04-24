@@ -2,18 +2,17 @@ package com.systemlabs.catalog_service.web.controllers;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertEquals;
 
 import com.systemlabs.catalog_service.AbstractIT;
 import com.systemlabs.catalog_service.domain.Product;
-
 import io.restassured.http.ContentType;
-
-import static org.junit.Assert.assertEquals;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
-@Sql("test-data.sql")
+@SpringJUnitConfig
+@Sql("/test-data.sql")
 public class ProductControllerTest extends AbstractIT {
     @Test
     void shouldReturnProducts() {
@@ -45,14 +44,13 @@ public class ProductControllerTest extends AbstractIT {
         assertEquals("The Hunger Games", product.name());
     }
 
-@Test
-void notFoundWhenProductCodeNotExists() {
-    given().contentType(ContentType.JSON)
-            .when()
-            .get("/api/products/{code}", "NON_EXISTENT_CODE")
-            .then()
-            .statusCode(404)
-            .body("title", is("Product Not Found"));
-}
-
+    @Test
+    void notFoundWhenProductCodeNotExists() {
+        given().contentType(ContentType.JSON)
+                .when()
+                .get("/api/products/{code}", "NON_EXISTENT_CODE")
+                .then()
+                .statusCode(404)
+                .body("title", is("Product Not Found"));
+    }
 }

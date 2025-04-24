@@ -10,17 +10,9 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "products")
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class ProductEntity {
 
     @Id
@@ -40,4 +32,69 @@ public class ProductEntity {
 
     @Column(nullable = false)
     @NotNull(message = "Product Price is required") @DecimalMin(value = "0.1", message = "Product Price must be greater than 0") private BigDecimal price;
+
+    public ProductEntity() {}
+
+    public ProductEntity(
+            Long id,
+            @NotEmpty(message = "Product Code is required") String code,
+            @NotEmpty(message = "Product Name is required") String name,
+            String description,
+            String imageUrl,
+            @NotNull(message = "Product Price is required") @DecimalMin(value = "0.1", message = "Product Price must be greater than 0") BigDecimal price) {
+        this.id = id;
+        this.code = code;
+        this.name = name;
+        this.description = description;
+        this.imageUrl = imageUrl;
+        this.price = price;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
 }

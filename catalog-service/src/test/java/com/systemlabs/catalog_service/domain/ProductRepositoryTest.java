@@ -1,82 +1,45 @@
 package com.systemlabs.catalog_service.domain;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.math.BigDecimal;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
+import org.springframework.test.context.jdbc.Sql;
 
-@DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Testcontainers
-public class ProductRepositoryTest {
-
-    @Container
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15-alpine");
-
-    @DynamicPropertySource
-    static void configureProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", postgres::getJdbcUrl);
-        registry.add("spring.datasource.username", postgres::getUsername);
-        registry.add("spring.datasource.password", postgres::getPassword);
-    }
+@DataJpaTest(
+        properties = {
+            "spring.test.database.replace=none",
+            "spring.datasource.url=jdbc:tc:postgresql:16-alpine:///db",
+        })
+// @Import(ContainersConfig.class)
+@Sql("/test-data.sql")
+class ProductRepositoryTest {
 
     @Autowired
     private ProductRepository productRepository;
 
-    @BeforeAll
-    static void beforeAll() {
-        postgres.start();
-    }
-
-    @AfterAll
-    static void afterAll() {
-        postgres.stop();
-    }
-
+    // You don't need to test the methods provided by Spring Data JPA.
+    // This test is to demonstrate how to write tests for the repository layer.
     @Test
-    void shouldFindProductById() {
-        // Arrange
-        ProductEntity product = new ProductEntity();
-        product.setName("Find Product");
-        product.setPrice(BigDecimal.valueOf(10));
-        ProductEntity savedProduct = productRepository.save(product);
-
-        // Act
-        ProductEntity foundProduct = productRepository
-                .findById(savedProduct.getId())
-                .orElseThrow(() -> new RuntimeException("Product not found"));
-
-        // Assert
-        assertEquals(savedProduct.getId(), foundProduct.getId());
-        assertEquals("Find Product", foundProduct.getName());
+    void shouldGetAllProducts() {
+        List<ProductEntity> products = productRepository.findAll();
+        assertThat(products).hasSize(15);
     }
 
     @Test
     void shouldGetProductByCode() {
-        // Arrange
-        ProductEntity product = new ProductEntity();
-        product.setCode("ABC");
-        product.setName("Find Product");
-        product.setPrice(BigDecimal.valueOf(10));
-        ProductEntity savedProduct = productRepository.save(product);
+        ProductEntity product = productRepository.findByCode("P100").orElseThrow();
+        assertThat(product.getCode()).isEqualTo("P100");
+        assertThat(product.getName()).isEqualTo("The Hunger Games");
+        assertThat(product.getDescription()).isEqualTo("Winning will make you famous. Losing means certain death...");
+        assertThat(product.getPrice()).isEqualTo(new BigDecimal("34.0"));
+    }
 
-        // Act
-        ProductEntity foundProduct = productRepository
-                .findByCode(savedProduct.getCode())
-                .orElseThrow();
-
-        // Assert
-        assertEquals(savedProduct.getCode(), foundProduct.getCode());
-        assertEquals("Find Product", foundProduct.getName());
+    @Test
+    void shouldReturnEmptyWhenProductCodeNotExists() {
+        assertThat(productRepository.findByCode("invalid_product_code")).isEmpty();
     }
 }
