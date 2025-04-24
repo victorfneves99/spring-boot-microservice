@@ -110,6 +110,11 @@
 			<scope>test</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<scope>annotationProcessor</scope>
+		</dependency>
 
 	</dependencies>
 
@@ -169,5 +174,4 @@
 
 		</plugins>
 	</build>
-
 </project>

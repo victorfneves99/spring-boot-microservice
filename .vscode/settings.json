@@ -7,5 +7,6 @@
             "command": "spotless:apply",
             "debug": false
         }
-    ]
+    ],
+    "java.debug.settings.onBuildFailureProceed": true
 }
