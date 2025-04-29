@@ -30,6 +30,7 @@
 	<properties>
 		<java.version>21</java.version>
 		<spotless-maven-plugin.version>2.44.3</spotless-maven-plugin.version>
+		<dockerImageName>victorfneves99/bookstore-${project.artifactId}</dockerImageName>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -130,6 +131,15 @@
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<image>
+						<name>${dockerImageName}</name> <!-- Usa a variável definida em <properties> -->
+					</image>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>

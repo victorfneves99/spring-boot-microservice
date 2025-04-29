@@ -6,8 +6,8 @@ public class ProductMapper {
         return new Product(
                 productEntity.getCode(),
                 productEntity.getName(),
-                productEntity.getImageUrl(),
                 productEntity.getDescription(),
+                productEntity.getImageUrl(),
                 productEntity.getPrice());
     }
 }
