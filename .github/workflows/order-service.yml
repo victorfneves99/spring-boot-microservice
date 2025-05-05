@@ -11,6 +11,8 @@ name: Order Service
 on:
   push:
     branches: ["**"]
+    paths:
+      - 'order-service/**'
 
 jobs:
   build:
